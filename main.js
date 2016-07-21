@@ -3,9 +3,10 @@ var Discordie = require("discordie"),
     Promise = require("promise"),
     chalk = require("chalk"),
     stripComments = require("strip-json-comments"),
-    yaspeller = require("yaspeller");
+    yaspeller = require("yaspeller"),
+    fs = require("fs");
     
-var discordBot = new Discordie(),
+var discordBot = new Discordie({autoReconnect: true}),
     settings = undefined,
     cleverbot = {};
 
@@ -91,7 +92,7 @@ var reloadSettings = (safe, errCallback, sCallback) => {
         return;
     }
     
-    var tmp = fs.readFileSync("./settings.json");
+    var tmp = fs.readFileSync("./settings.json", {encoding: "utf8"});
     tmp = stripComments(tmp);
     settings = JSON.parse(tmp);
     
@@ -192,7 +193,9 @@ try {
         diagResult.step_one = true;
     } else {
         try {
-            settings = require("./settings.json");
+            var tmp = fs.readFileSync("./settings.json", {encoding: "utf8"});
+            tmp = stripComments(tmp);
+            settings  = JSON.parse(tmp);
         } catch (err) {
             log("Discord ChatBot", "File \"settings.json\" corruped?", "err");
             settings = undefined;
@@ -225,6 +228,8 @@ try {
         }
     }
     
+    diagResult.error = error;
+
     log("Discord ChatBot", "Diagnostic complete", "ok");
     log("Discord ChatBot", "Diagnostic information:", "info");
     log("Discord ChatBot", diagResult, "info");
@@ -394,6 +399,16 @@ var cleverbotReady = false,
         discordBot.Dispatcher.on("GATEWAY_READY", () => {
             log("Discord", "Connected", "ok");
             events.connected();
+        });
+
+        discordBot.Dispatcher.on("DISCONNECTED", (e) => {
+            log("Discord", `Disconnected, error: ${e.error}`, "err");
+            if(e.error === "No token specified" || e.error === "Login failed") {
+                process.exit(-1);
+            } else if(e.error.exception === 4004) {
+                log("Discord", "4004, authentication failed: The account token sent with your identify payload is incorrect.", "err");
+                process.exit(-1);
+            }
         });
 
         discordBot.Dispatcher.on("MESSAGE_CREATE", (e) => {
