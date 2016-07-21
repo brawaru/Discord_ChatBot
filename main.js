@@ -117,6 +117,12 @@ var reloadSettings = (safe, errCallback, sCallback) => {
         }
     }
     
+    if(settings.prefix === null || settings.prefix === undefined) {
+        log("Settings", `Bot reacts to all messages${settings.bindToChannels ? ` in channels: ${settings.bindToChannels.join()}` : ""}`);
+    } else {
+        log("Settings", `Bot reacts only to messages, which starts with \`${settings.prefix} \` ${settings.bindToChannels ? `in channels: ${settings.bindToChannels.join()}` : ""}`);
+    }
+
     if(!settings.replyMaxTime) {
         log("Settings", `Maximal time to reply not set. Used default value: ${replyMax}.`, "warn");
     } else {
@@ -445,7 +451,13 @@ var cleverbotReady = false,
                 if(e.author.id === discordBot.User.id) {
                     return;
                 }
+                if(!e.content) {
+                    return;
+                }
                 if(e.content.startsWith("! ") || e.content.startsWith("!!")) {
+                    return;
+                }
+                if((settings.prefix !== undefined && settings.prefix !== null) && !e.content.startsWith(`${settings.prefix} `)) {
                     return;
                 }
                 if(settings.bindToChannels) {

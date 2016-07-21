@@ -17,8 +17,13 @@
     // noReplace.json: ["Heyo"]
     // Without: Heyo, friend -> [YS] Hey, friend
     // With: Heyo, friend -> [YS] Heyo, friend
-    "noReplace": "./noReplace.json"
+    "noReplace": "./noReplace.json",
     
     // reply only to users with ID:
-    // "replyOnlyTo": ["12345678912345"]
+    // "replyOnlyTo": ["12345678912345"],
+
+    // Prefix for "bot 
+    // if null or undefined - bot reacts to all messages from channel
+    // (!!!) Don't set it to `!` or `!!`
+    "prefix": null
 }
