@@ -118,9 +118,9 @@ var reloadSettings = (safe, errCallback, sCallback) => {
     }
     
     if(settings.prefix === null || settings.prefix === undefined) {
-        log("Settings", `Bot reacts to all messages${settings.bindToChannels ? ` in channels: ${settings.bindToChannels.join()}` : ""}`);
+        log("Settings", `Bot reacts to all messages${settings.bindToChannels ? ` in channels: ${settings.bindToChannels.join()}` : ""}`, "info");
     } else {
-        log("Settings", `Bot reacts only to messages, which starts with \`${settings.prefix} \` ${settings.bindToChannels ? `in channels: ${settings.bindToChannels.join()}` : ""}`);
+        log("Settings", `Bot reacts only to messages, which starts with \`${settings.prefix} \` ${settings.bindToChannels ? `in channels: ${settings.bindToChannels.join()}` : ""}`, "info");
     }
 
     if(!settings.replyMaxTime) {
