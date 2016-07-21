@@ -449,8 +449,8 @@ var cleverbotReady = false,
                     return;
                 }
                 if(settings.bindToChannels) {
-                    logMessage(e);
                     if(settings.bindToChannels.indexOf(e.channel.id) !== -1) {
+                        logMessage(e);
                         events.new_message(e.content, e.channel);
                     }
                 } else {
