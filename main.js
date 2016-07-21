@@ -460,14 +460,15 @@ var cleverbotReady = false,
                 if((settings.prefix !== undefined && settings.prefix !== null) && !e.content.startsWith(`${settings.prefix} `)) {
                     return;
                 }
+                var text = settings.prefix !== undefined && settings.prefix !== null ? e.content.slice(`${settings.prefix} `.length) : e.content;
                 if(settings.bindToChannels) {
                     if(settings.bindToChannels.indexOf(e.channel.id) !== -1) {
                         logMessage(e);
-                        events.new_message(e.content, e.channel);
+                        events.new_message(text, e.channel);
                     }
                 } else {
                     logMessage(e);
-                    events.new_message(e.content, e.channel);
+                    events.new_message(text, e.channel);
                 }
             } break;
             }
